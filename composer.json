@@ -1,0 +1,17 @@
+{
+    "name": "youcode/my-mvc",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "TahaLechgar",
+            "email": "tahamr08@gmail.com"
+        }
+    ],
+    "require": {
+      "ext-pdo": "*"
+    }
+}
