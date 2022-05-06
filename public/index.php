@@ -2,6 +2,8 @@
 
 
 use app\core\Application;
+use app\controllers\RoomController;
+use app\controllers\UserController;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -17,7 +19,6 @@ $config = [
 
 $app = new Application(dirname(__DIR__), $config);
 
-
-$app->router->get('/taha/{id}',  'helloWorld');
+include_once '../config/routes.php';
 
 $app->run();
