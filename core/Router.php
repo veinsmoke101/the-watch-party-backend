@@ -38,15 +38,60 @@ class Router
         $this->routes['patch'][$path] = $callback;
     }
 
+    public function getCallback()
+    {
+        $path = $this->request->getPath();
+        $method = $this->request->getMethod();
+        $url = trim($path, '/');
+
+        $routesByMethod = $this->routes[$method] ?? [];
+        foreach ($routesByMethod as $route => $callback){
+            $route = trim($route, '/');
+
+            if(!$route){
+                continue;
+            }
+
+            $routeNames = [];
+
+            if(preg_match_all('/\{(\w+)(:[^}]+)?}/', $route, $matches)){
+                $routeNames = $matches[1];
+            }
+
+
+            $routeRegex = '@^' .  preg_replace_callback('/\{\w+(:([^}]+))?}/', fn($m) => isset($m[2] ) ? "($m[2])" : '(\w+)', $route) . '$@';
+
+
+            if (preg_match_all($routeRegex, $url, $valueMatches)){
+                $values=[];
+                for ($i=1; $i < count($valueMatches); $i++){
+                    $values[]=$valueMatches [$i][0];
+                }
+                $routeParams = array_combine($routeNames, $values);
+                $this->request->setRouteParams ($routeParams);
+                return $callback;
+            }
+        }
+        return false;
+    }
+
     public function resolve()
     {
 
         $path = $this->request->getPath();
         $method = $this->request->getMethod();
         $callback = $this->routes[$method][$path] ?? false;
-        if($callback === false){
-            $this->response->setStatusCode(404);
-            return $this->renderView('_404');
+        if(!$callback){
+            $callback = $this->getCallback();
+            echo '<pre>';
+            var_dump($callback);
+            echo '</pre>';
+            die();
+            if(!$callback){
+                $this->response->setStatusCode(404);
+                return $this->renderView('_404');
+            }
+
         }
 
         if(is_string($callback)){
@@ -55,6 +100,7 @@ class Router
 
         return call_user_func($callback);
     }
+
 
     public function renderView(string $view, array $params = [])
     {
@@ -93,7 +139,6 @@ class Router
     private function renderOnlyView($view, $params){
         extract($params);
 
-//        var_dump($name);
         ob_start();
         include_once Application::$ROOT."/views/$view.php";
         return ob_get_clean();

@@ -2,3 +2,4 @@ vendor
 .idea
 *.css
 *.css.map
+public/.env
