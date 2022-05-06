@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-class Test
+class RoomHistory
 {
 
 }
