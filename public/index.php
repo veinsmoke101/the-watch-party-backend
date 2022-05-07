@@ -2,8 +2,7 @@
 
 
 use app\core\Application;
-use app\controllers\RoomController;
-use app\controllers\UserController;
+
 
 require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);

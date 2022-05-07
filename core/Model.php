@@ -38,12 +38,14 @@ class Model
         $this->db->getOneRecord();
     }
 
-    public function insert($fields, $values): bool
+    public function insert($data): bool
     {
+        $fields = array_keys($data);
+        $values = array_keys($data);
         $query = "INSERT INTO $this->table (" . implode(',', $fields) . ')
         VALUES (:' . implode(', :', $fields) . ')';
         $this->db->prepare($query);
-        $this->db->bind($fields, $values);
+        $this->db->bind($data);
         return $this->db->execute();
     }
 }

@@ -40,19 +40,15 @@ class Database
 
     /**
      * @param string|array $params
-     * @param string $val
      * @return void
      */
-    public function bind($params, string $val = "")
+    public function bind($params)
     {
         try{
-            if(!is_array($params)){
-                $this->statment->bindValue(":$params", $val);
-            }else{
-                foreach ($params as $param => $value){
+            foreach ($params as $param => $value){
                     $this->statment->bindValue(":$param", $value);
-                }
             }
+
         }catch(PDOException $exception){
             echo 'Bind failed' . $exception->getMessage();
         }
