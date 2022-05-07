@@ -24,8 +24,9 @@ class Request
         return $this;
     }
 
-    public function getRouteParams($params): array
+    public function getRouteParams(): array
     {
+
         return $this->routeParams;
     }
 }

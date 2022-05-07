@@ -6,6 +6,14 @@ namespace app\core;
 class Controller
 {
 
+    protected Response $response;
+
+
+    public function __construct()
+    {
+        $this->response = new Response();
+    }
+
 
     /**
      * @param $view

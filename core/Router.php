@@ -4,8 +4,8 @@ namespace app\core;
 class Router
 {
     public array $routes = [];
-    private Request $request ;
-    private Response $response ;
+    private Request $request;
+    private Response $response;
 
     /*
      * @param Request $request
@@ -65,7 +65,7 @@ class Router
             if (preg_match_all($routeRegex, $url, $valueMatches)){
                 $values=[];
                 for ($i=1; $i < count($valueMatches); $i++){
-                    $values[]=$valueMatches [$i][0];
+                    $values[] = $valueMatches [$i][0];
                 }
                 $routeParams = array_combine($routeNames, $values);
                 $this->request->setRouteParams ($routeParams);
@@ -83,15 +83,10 @@ class Router
         $callback = $this->routes[$method][$path] ?? false;
         if(!$callback){
             $callback = $this->getCallback();
-            echo '<pre>';
-            var_dump($callback);
-            echo '</pre>';
-            die();
             if(!$callback){
                 $this->response->setStatusCode(404);
                 return $this->renderView('_404');
             }
-
         }
 
         if(is_string($callback)){

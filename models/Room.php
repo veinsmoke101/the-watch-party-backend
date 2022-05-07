@@ -17,4 +17,9 @@ class Room extends Model
     {
         return $this->insert($data);
     }
+
+    public function getRoomById($id)
+    {
+        return $this->getOneRecordByColumn("unique_reference", $id);
+    }
 }
