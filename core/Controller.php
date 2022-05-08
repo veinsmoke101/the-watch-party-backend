@@ -12,6 +12,9 @@ class Controller
     public function __construct()
     {
         $this->response = new Response();
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST ' );
+        header('Access-Control-Allow-Credentials: true');
     }
 
 
