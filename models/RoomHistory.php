@@ -17,4 +17,9 @@ class RoomHistory extends Model
     {
         return $this->insert($data);
     }
+
+    public function getRoomUsers($id)
+    {
+        return $this->getRecordByColumn('room_id', $id);
+    }
 }

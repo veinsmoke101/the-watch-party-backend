@@ -28,6 +28,23 @@ class RoomHistoryController extends Controller
         }else{
             echo 'Something went wrong';
         }
+    }
+
+    public function roomUsers()
+    {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        $room_id = $data['room_id'];
+
+        $RoomHistory = $this->model('RoomHistory');
+        $users = $RoomHistory->getRoomUsers($room_id);
+        if(count($users) === 0){
+            echo "The room of Id = $room_id does not exist";
+        }else {
+            echo json_encode($users);
+        }
+
 
     }
 }

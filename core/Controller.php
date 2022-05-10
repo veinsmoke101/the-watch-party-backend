@@ -35,8 +35,7 @@ class Controller
 
     public function model($model)
     {
-//        var_dump(dirname(__DIR__)."\models\\".$model.".php");
-//        die();
+
         if(file_exists(dirname(__DIR__)."\models\\".$model.".php")){
             $model = "\app\models\\".$model;
             return new $model();
