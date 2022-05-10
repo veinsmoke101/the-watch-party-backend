@@ -22,4 +22,12 @@ class RoomHistory extends Model
     {
         return $this->getRecordByColumn('room_id', $id);
     }
+
+    public function getRoomCurrentUsers($room_id)
+    {
+        $query = "select * from room_history where room_id = :room_id and user_left_at is null";
+        $this->db->prepare($query);
+        $this->db->bind(array('room_id' => $room_id));
+        return $this->db->getMultipleRecords();
+    }
 }
