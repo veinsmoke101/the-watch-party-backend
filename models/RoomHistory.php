@@ -18,9 +18,9 @@ class RoomHistory extends Model
         return $this->insert($data);
     }
 
-    public function getRoomUsers($id)
+    public function getRoomUsers($room_id)
     {
-        return $this->getRecordByColumn('room_id', $id);
+        return $this->getRecordByColumn('room_id', $room_id);
     }
 
     public function getRoomCurrentUsers($room_id)
@@ -29,5 +29,10 @@ class RoomHistory extends Model
         $this->db->prepare($query);
         $this->db->bind(array('room_id' => $room_id));
         return $this->db->getMultipleRecords();
+    }
+
+    public function getUserRooms($user_id)
+    {
+        return $this->getRecordByColumn('user_id', $user_id);
     }
 }

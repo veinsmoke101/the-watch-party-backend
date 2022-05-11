@@ -45,6 +45,8 @@ class RoomHistoryController extends Controller
             echo json_encode($users);
         }
     }
+
+
     public function currentRoomUsers()
     {
         $json = file_get_contents('php://input');
@@ -57,6 +59,21 @@ class RoomHistoryController extends Controller
             echo "The room may have been expired or never existed";
         }else {
             echo json_encode($users);
+        }
+    }
+
+    public function userRooms()
+    {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $user_id = $data['user_id'];
+
+        $RoomHistory = $this->model('RoomHistory');
+        $rooms = $RoomHistory->getUserRooms($user_id);
+        if(count($rooms) === 0){
+            echo "This user does not have never joined a room";
+        }else {
+            echo json_encode($rooms);
         }
     }
 }
