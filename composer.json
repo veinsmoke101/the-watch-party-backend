@@ -15,6 +15,7 @@
       "ext-pdo": "*",
         "vlucas/phpdotenv": "^5.4",
       "ext-json": "*",
-        "pusher/pusher-push-notifications": "^1.1"
+        "pusher/pusher-push-notifications": "^1.1",
+        "pusher/pusher-php-server": "^7.0"
     }
 }
