@@ -14,6 +14,7 @@
     "require": {
       "ext-pdo": "*",
         "vlucas/phpdotenv": "^5.4",
-      "ext-json": "*"
+      "ext-json": "*",
+        "pusher/pusher-push-notifications": "^1.1"
     }
 }
