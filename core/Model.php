@@ -66,16 +66,21 @@ class Model
 
         $whereClause = '';
 
-        foreach ($conditionColumns as $condition){
-            $whereClause .= "$condition = :$condition";
-        }
+        for ($i = 0; $i < count($conditionColumns); $i++){
+            $whereClause .= "$conditionColumns[$i] = :$conditionColumns[$i]";
+            if($i < count($conditionColumns) - 1){
+                $whereClause .= ' and ';
+            }
 
+        }
         $data = array(
             $columnToUpdate => $value,
             ...$conditions
         );
 
+
         $query = "Update $this->table set $columnToUpdate = :$columnToUpdate where " . $whereClause;
+
         $this->db->prepare($query);
         $this->db->bind($data);
         return $this->db->execute();

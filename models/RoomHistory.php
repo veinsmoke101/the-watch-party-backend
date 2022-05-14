@@ -35,4 +35,10 @@ class RoomHistory extends Model
     {
         return $this->getRecordByColumn('user_id', $user_id);
     }
+
+    public function setUserLeftAt(string $userLeftAt, array $where): bool
+    {
+        return $this->updateColumnWithConditions('user_left_at', $userLeftAt, $where);
+    }
+
 }

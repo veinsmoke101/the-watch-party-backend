@@ -112,6 +112,26 @@ class RoomController extends Controller
         echo $response;
     }
 
+    public function leaveRoom()
+    {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $roomId = $data['room_id'];
+        $userId = $data['user_id'];
+
+        $conditions = array(
+            'room_id' => $roomId,
+            'user_id' => $userId
+        );
+
+        $currentDateTime = date('Y-m-d H:i:s');
+
+        $RoomHistory = $this->model('RoomHistory');
+        if($RoomHistory->setUserLeftAt($currentDateTime, $conditions)){
+            echo 'user left the room successfully';
+        }
+    }
+
     public function newVideo()
     {
 
@@ -128,5 +148,4 @@ class RoomController extends Controller
 
         echo 'video url sent successfully';
     }
-
 }
