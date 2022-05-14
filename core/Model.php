@@ -58,4 +58,27 @@ class Model
         $this->db->bind($data);
         return $this->db->execute();
     }
+
+    public function updateColumnWithConditions($columnToUpdate, $value, $conditions): bool
+    {
+        $conditionColumns = array_keys($conditions);
+//        $conditionValue = array_values($conditions);
+
+        $whereClause = '';
+
+        foreach ($conditionColumns as $condition){
+            $whereClause .= "$condition = :$condition";
+        }
+
+        $data = array(
+            $columnToUpdate => $value,
+            ...$conditions
+        );
+
+        $query = "Update $this->table set $columnToUpdate = :$columnToUpdate where " . $whereClause;
+        $this->db->prepare($query);
+        $this->db->bind($data);
+        return $this->db->execute();
+
+    }
 }
