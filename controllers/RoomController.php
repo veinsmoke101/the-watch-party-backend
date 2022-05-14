@@ -48,9 +48,19 @@ class RoomController extends Controller
             $this->pusher->trigger(
                 $roomRef,
                 'videoUrl',
-                array('video_url' => '')
+                ''
             );
-            echo 'Room created successfully';
+
+            $newRoomData = $Room->getRoomByRef($roomRef);
+
+            $response = array(
+                'status' => 'success',
+                'data' => $newRoomData,
+                'message' => "Room created successfully"
+            );
+            $response = json_encode($response);
+            echo $response;
+
         }else{
             echo 'Something went wrong';
         }
@@ -134,7 +144,6 @@ class RoomController extends Controller
 
     public function newVideo()
     {
-
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $roomRef    = $data['roomRef'];
@@ -143,7 +152,7 @@ class RoomController extends Controller
         $this->pusher->trigger(
             $roomRef,
             'videoUrl',
-            array('videoUrl' => $videoUrl)
+            $videoUrl
         );
 
         echo 'video url sent successfully';

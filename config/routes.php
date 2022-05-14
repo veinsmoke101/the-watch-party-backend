@@ -15,7 +15,7 @@ $app->router->get('/register',              [new UserController, 'register']);
 $app->router->post('/register',             [new UserController, 'register']);
 $app->router->get('/profile/{id}',          [new UserController, 'profile']);
 $app->router->get('/room/{id}',             [new RoomController, 'joinRoom']); // done
-$app->router->post('/leave/room',            [new RoomController, 'leaveRoom']);
+$app->router->post('/leave/room',           [new RoomController, 'leaveRoom']);
 $app->router->post('/new/room',             [new RoomController, 'newRoom']); // done
 $app->router->post('/new/vid',              [new RoomController, 'newVideo']); // done
 $app->router->post('/room/all/users',       [new RoomHistoryController, 'roomUsers']); // done
