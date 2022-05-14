@@ -1,6 +1,9 @@
 <?php
 
+
+
 namespace app\controllers;
+
 
 use app\core\Application;
 use app\core\Controller;
@@ -8,14 +11,24 @@ use app\core\Request;
 use app\models\Room;
 use DateTime;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
+use Pusher\ApiErrorException;
+use Pusher\Pusher;
+use Pusher\PusherException;
 
 class RoomController extends Controller
 {
+    private Pusher $pusher;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->pusher = Application::$app->pusher;
+    }
 
     public function newRoom()
     {
-        $roomId = uniqid('room_');
+        $roomRef = uniqid('room_');
 
         $start_at = ( isset($_POST['start_at']) && !empty($_POST['start_at']) ) ? $_POST['start_at'] : date('Y-m-d H:i:s');
         $expire_at = ( isset($_POST['expire_at']) && !empty($_POST['expire_at']) ) ? $_POST['expire_at'] : null;
@@ -26,11 +39,17 @@ class RoomController extends Controller
             "start_at"          => $start_at,
             "expire_at"         => $expire_at,
             "author"            => $_POST['author'],
-            "unique_reference"  => $roomId
+            "unique_reference"  => $roomRef
         );
 
         $Room = $this->model('Room');
         if($Room->insert($newRoom)){
+            // trigger a pusher channel events with the room reference
+            $this->pusher->trigger(
+                $roomRef,
+                'videoUrl',
+                array('video_url' => '')
+            );
             echo 'Room created successfully';
         }else{
             echo 'Something went wrong';
@@ -41,7 +60,7 @@ class RoomController extends Controller
      *
      * @throws Exception
      */
-    public function room()
+    public function joinRoom()
     {
         // get Room id from the url
         $params = Application::$app->request->getRouteParams();
@@ -91,6 +110,23 @@ class RoomController extends Controller
         );
         $response = json_encode($response);
         echo $response;
+    }
+
+    public function newVideo()
+    {
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $roomRef    = $data['roomRef'];
+        $videoUrl   = $data['videoUrl'];
+
+        $this->pusher->trigger(
+            $roomRef,
+            'videoUrl',
+            array('videoUrl' => $videoUrl)
+        );
+
+        echo 'video url sent successfully';
     }
 
 }

@@ -52,7 +52,6 @@ class Model
     public function insert($data): bool
     {
         $fields = array_keys($data);
-        $values = array_keys($data);
         $query = "INSERT INTO $this->table (" . implode(',', $fields) . ')
         VALUES (:' . implode(', :', $fields) . ')';
         $this->db->prepare($query);

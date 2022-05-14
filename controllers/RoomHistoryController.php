@@ -18,17 +18,18 @@ class RoomHistoryController extends Controller
     }
 
 
-    public function joinRoom()
-    {
-        $json = file_get_contents('php://input');
-        $userData = json_decode($json);
+//    public function joinRoom()
+//    {
+//        $json = file_get_contents('php://input');
+//        $userData = json_decode($json);
+//
+//        if($this->roomHistory->store($userData)){
+//            echo 'Successfully joined the room';
+//        }else{
+//            echo 'Something went wrong';
+//        }
+//    }
 
-        if($this->roomHistory->insert($userData)){
-            echo 'Successfully joined the room';
-        }else{
-            echo 'Something went wrong';
-        }
-    }
 
     public function roomUsers()
     {
@@ -37,8 +38,9 @@ class RoomHistoryController extends Controller
 
         $room_id = $data['room_id'];
 
-        $RoomHistory = $this->model('RoomHistory');
-        $users = $RoomHistory->getRoomUsers($room_id);
+//        $RoomHistory = $this->model('RoomHistory');
+//        $users = $RoomHistory->getRoomUsers($room_id);
+        $users = $this->roomHistory->getRoomUsers($room_id);
         if(count($users) === 0){
             echo "The room of Id = $room_id does not exist";
         }else {
