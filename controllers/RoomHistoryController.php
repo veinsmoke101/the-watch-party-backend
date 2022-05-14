@@ -71,7 +71,7 @@ class RoomHistoryController extends Controller
         $RoomHistory = $this->model('RoomHistory');
         $rooms = $RoomHistory->getUserRooms($user_id);
         if(count($rooms) === 0){
-            echo "This user does not have never joined a room";
+            echo "This have never joined a room or may never existed!";
         }else {
             echo json_encode($rooms);
         }
