@@ -86,11 +86,11 @@ class RoomController extends Controller
 
         // handle the <<joinRoom>> process
         $roomData = $Room->getRoomByRef($roomId);
-        $start_at   = new DateTime(date('Y-m-d H:i:s'));
+        $today   = new DateTime(date('Y-m-d H:i:s'));
         $expire_at  = new DateTime($roomData["expire_at"]);
 
         //check if room is expired
-        if($roomData["expire_at"] && $start_at >= $expire_at) {
+        if($roomData["expire_at"] && $today >= $expire_at) {
             $this->response->setStatusCode(410);
             $response = array(
                 'status' => 'error',
@@ -122,6 +122,7 @@ class RoomController extends Controller
         echo $response;
     }
 
+
     public function leaveRoom()
     {
         $json = file_get_contents('php://input');
@@ -149,12 +150,37 @@ class RoomController extends Controller
         $roomRef    = $data['roomRef'];
         $videoUrl   = $data['videoUrl'];
 
+
+        if($this->checkIfRoomExpired($roomRef)) {
+            $this->response->setStatusCode(410);
+            $response = array(
+                'status' => 'error',
+                'message' => "room expired"
+            );
+            echo json_encode($response);
+            return;
+        }
+
+
         $this->pusher->trigger(
             $roomRef,
             'videoUrl',
             $videoUrl
         );
-
         echo 'video url sent successfully';
+    }
+
+    public function checkIfRoomExpired($roomRef): bool
+    {
+        $Room = $this->model('Room');
+
+        $roomData = $Room->getRoomByRef($roomRef);
+        $today   = new DateTime(date('Y-m-d H:i:s'));
+        $expire_at  = new DateTime($roomData["expire_at"]);
+        if($roomData["expire_at"] && $today >= $expire_at) {
+            return true;
+        }
+        return false;
+
     }
 }
