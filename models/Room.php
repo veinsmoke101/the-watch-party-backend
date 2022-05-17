@@ -22,4 +22,12 @@ class Room extends Model
     {
         return $this->getOneRecordByColumn("unique_reference", $id);
     }
+
+    public function checkIfUserInRoom($user_id)
+    {
+        $query = "select * from room_history where user_id = :user_id and user_left_at is null";
+        $this->db->prepare($query);
+        $this->db->bind(array('user_id' => $user_id));
+        return $this->db->getOneRecord();
+    }
 }

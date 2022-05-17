@@ -99,7 +99,6 @@ class Router
 
     public function renderView(string $view, array $params = [])
     {
-
         if($view === 'login' || $view === 'register'){
             $layout = 'auth';
         }
@@ -126,7 +125,6 @@ class Router
 
     private function layoutContent($layout , $post = false)
     {
-
         ob_start();
         include_once Application::$ROOT."/views/layouts/$layout.php";
         return ob_get_clean();

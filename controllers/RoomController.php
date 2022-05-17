@@ -74,18 +74,15 @@ class RoomController extends Controller
     {
         // get Room id from the url
         $params = Application::$app->request->getRouteParams();
-        $roomId = $params["id"];
-
-        // get user_data of the request sender
-        $json = file_get_contents('php://input');
-        $userData = json_decode($json, true);
+        $roomRef = $params["room_id"];
+        $userId = $params["user_id"];
 
         // call models
         $Room = $this->model('Room');
         $RoomHistory = $this->model('RoomHistory');
 
         // handle the <<joinRoom>> process
-        $roomData = $Room->getRoomByRef($roomId);
+        $roomData = $Room->getRoomByRef($roomRef);
         $today   = new DateTime(date('Y-m-d H:i:s'));
         $expire_at  = new DateTime($roomData["expire_at"]);
 
@@ -100,9 +97,11 @@ class RoomController extends Controller
             return;
         }
 
+        $this->prepareUser($userId);
+
         $roomHistoryData = array(
             'room_id' => $roomData['id'],
-            'user_id' => $userData['id'],
+            'user_id' => $userId,
             'user_joined_at' => date('Y-m-d H:i:s')
         );
         if(!$RoomHistory->insert($roomHistoryData)){
@@ -116,7 +115,7 @@ class RoomController extends Controller
         $response = array(
             'status' => 'success',
             'data' => $roomData,
-            'message' => "joined $roomId successfully"
+            'message' => "joined $roomRef successfully"
         );
         $response = json_encode($response);
         echo $response;
@@ -181,6 +180,17 @@ class RoomController extends Controller
             return true;
         }
         return false;
-
     }
+
+    public function prepareUser($user_id)
+    {
+        $Room = $this->model('Room');
+        $userJoined = $Room->checkIfUserInRoom($user_id);
+        if(!$userJoined) return;
+
+        $RoomHistory = $this->model('RoomHistory');
+        $today = date('Y-m-d H:i:s');
+        $RoomHistory->setUserLeftAt($today, array('user_id' => $user_id));
+    }
+
 }
