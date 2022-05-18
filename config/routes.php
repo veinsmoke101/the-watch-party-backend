@@ -1,5 +1,6 @@
 <?php
 
+use app\controllers\MessageController;
 use app\controllers\RoomController;
 use app\controllers\UserController;
 use app\controllers\RoomHistoryController;
@@ -21,4 +22,6 @@ $app->router->post('/new/vid',              [new RoomController, 'newVideo']); /
 $app->router->post('/room/all/users',       [new RoomHistoryController, 'roomUsers']); // done
 $app->router->post('/room/current/users',   [new RoomHistoryController, 'currentRoomUsers']); // done
 $app->router->post('/user/rooms',           [new RoomHistoryController, 'userRooms']); // done
+$app->router->post('/new/message',          [new MessageController(), 'newMessage']);
+$app->router->post('/last/messages',        [new MessageController(), 'lastMessages']);
 
