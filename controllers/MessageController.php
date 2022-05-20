@@ -19,6 +19,26 @@ class MessageController extends Controller
 
     public function newMessage()
     {
+       $this->videoEvents('message');
+    }
+
+    public function pauseVideoMessage()
+    {
+        $this->videoEvents('pause');
+    }
+
+    public function playVideoMessage()
+    {
+        $this->videoEvents('play');
+    }
+
+    public function jumpVideoMessage()
+    {
+        $this->videoEvents('jump');
+    }
+
+    public function videoEvents($event)
+    {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $roomRef    = $data['roomRef'];
@@ -28,9 +48,12 @@ class MessageController extends Controller
 
         $this->pusher->trigger(
             $roomRef,
-            'message',
+            $event,
             $message
         );
-        echo 'message sent successfully';
+        echo "$event sent successfully";
     }
+
+
+
 }
