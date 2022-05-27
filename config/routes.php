@@ -24,7 +24,7 @@ $app->router->post('/room/current/users',   [new RoomHistoryController, 'current
 $app->router->post('/user/rooms',           [new RoomHistoryController, 'userRooms']); // done
 $app->router->post('/new/message',          [new MessageController(), 'newMessage']); // done
 $app->router->post('/last/messages',        [new MessageController(), 'lastMessages']);
-$app->router->post('/pause/video',          [new MessageController(), 'pauseVideoMessage']);
-$app->router->post('/play/video',           [new MessageController(), 'playVideoMessage']);
-$app->router->post('/jump/video',           [new MessageController(), 'jumpVideoMessage']);
+$app->router->post('/video/pause',          [new MessageController(), 'pauseVideoMessage']);
+$app->router->post('/video/play',           [new MessageController(), 'playVideoMessage']);
+$app->router->post('/video/jump',           [new MessageController(), 'jumpVideoMessage']);
 
