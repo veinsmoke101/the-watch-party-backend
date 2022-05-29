@@ -24,7 +24,6 @@ class RoomController extends Controller
     {
         parent::__construct();
         $this->pusher = Application::$app->pusher;
-        $this->cors();
     }
 
     public function newRoom()

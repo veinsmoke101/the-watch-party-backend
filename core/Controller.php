@@ -12,6 +12,7 @@ class Controller
     public function __construct()
     {
         $this->response = new Response();
+        $this->cors();
     }
 
 
