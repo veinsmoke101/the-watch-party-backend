@@ -7,14 +7,10 @@ namespace app\controllers;
 
 use app\core\Application;
 use app\core\Controller;
-use app\core\Request;
-use app\models\Room;
 use DateTime;
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
-use Pusher\ApiErrorException;
+use http\Client;
 use Pusher\Pusher;
-use Pusher\PusherException;
 
 class RoomController extends Controller
 {

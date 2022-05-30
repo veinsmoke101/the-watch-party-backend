@@ -4,17 +4,20 @@ namespace app\controllers;
 
 use app\core\Application;
 use app\core\Controller;
+use Predis\Client;
 use Pusher\Pusher;
 
 class MessageController extends Controller
 {
 
     private Pusher $pusher;
+    private Client $redisClient;
 
     public function __construct()
     {
         parent::__construct();
         $this->pusher = Application::$app->pusher;
+        $this->redisClient = new Client();
     }
 
     public function newMessage()
@@ -39,6 +42,7 @@ class MessageController extends Controller
 
     public function videoEvents($event)
     {
+
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $roomRef    = $data['roomRef'];
