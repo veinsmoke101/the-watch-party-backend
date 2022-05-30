@@ -28,3 +28,7 @@ $app->router->post('/video/pause',          [new MessageController(), 'pauseVide
 $app->router->post('/video/play',           [new MessageController(), 'playVideoMessage']);
 $app->router->post('/video/jump',           [new MessageController(), 'jumpVideoMessage']);
 
+
+
+$app->router->post('/redis/check',           [new RoomController(), 'redisCheck']);
+

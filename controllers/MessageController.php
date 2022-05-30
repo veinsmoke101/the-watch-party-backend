@@ -42,13 +42,17 @@ class MessageController extends Controller
 
     public function videoEvents($event)
     {
-
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $roomRef    = $data['roomRef'];
         $message   = ['message' => $data['message']];
-        if(array_key_exists('time',$data))  $message['time'] = $data['time'];
+        if(array_key_exists('time',$data))
+            $message['time'] = $data['time'];
 
+        if($this->redisClient->llen($roomRef) === 5){
+            $this->redisClient->rpop($roomRef);
+        }
+        $this->redisClient->lpush($roomRef,[json_encode($message)]);
 
         $this->pusher->trigger(
             $roomRef,

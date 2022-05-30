@@ -9,17 +9,29 @@ use app\core\Application;
 use app\core\Controller;
 use DateTime;
 use Exception;
-use http\Client;
+use Predis\Client;
 use Pusher\Pusher;
 
 class RoomController extends Controller
 {
     private Pusher $pusher;
+    private Client $redisClient;
+
+
+    public function redisCheck()
+    {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $roomRef = $data['roomRef'];
+        var_dump($this->redisClient->lrange($roomRef, 0, -1));
+    }
+
 
     public function __construct()
     {
         parent::__construct();
         $this->pusher = Application::$app->pusher;
+        $this->redisClient = new Client();
     }
 
     public function newRoom()
@@ -68,6 +80,8 @@ class RoomController extends Controller
      */
     public function joinRoom()
     {
+
+
         // get Room id from the url
         $params = Application::$app->request->getRouteParams();
         $roomRef = $params["room_id"];
