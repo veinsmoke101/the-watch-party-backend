@@ -2,7 +2,7 @@
 
 use app\controllers\MessageController;
 use app\controllers\RoomController;
-use app\controllers\UserController;
+use app\controllers\AuthController;
 use app\controllers\RoomHistoryController;
 
 $app->router->get('/', function () {
@@ -10,11 +10,11 @@ $app->router->get('/', function () {
     die();
 }   );
 
-$app->router->get('/login',                 [new UserController, 'login']);
-$app->router->post('/login',                [new UserController, 'login']);
-$app->router->get('/register',              [new UserController, 'register']);
-$app->router->post('/register',             [new UserController, 'register']);
-$app->router->get('/profile/{id}',          [new UserController, 'profile']);
+$app->router->get('/login',                 [new AuthController, 'login']);
+$app->router->post('/login',                [new AuthController, 'login']);
+$app->router->get('/register',              [new AuthController, 'register']);
+$app->router->post('/register',             [new AuthController, 'register']);
+$app->router->get('/profile/{id}',          [new AuthController, 'profile']);
 $app->router->get('/room/{room_id}/{user_id}',[new RoomController, 'joinRoom']); // done
 $app->router->post('/leave/room',           [new RoomController, 'leaveRoom']); // done
 $app->router->post('/new/room',             [new RoomController, 'newRoom']); // done

@@ -3,6 +3,8 @@
 namespace app\core;
 
 
+use Exception;
+
 class Model
 {
 
@@ -56,7 +58,12 @@ class Model
         VALUES (:' . implode(', :', $fields) . ')';
         $this->db->prepare($query);
         $this->db->bind($data);
-        return $this->db->execute();
+        try{
+            return $this->db->execute();
+        }catch(Exception $exception){
+            echo $exception;
+            die();
+        }
     }
 
     public function updateColumnWithConditions($columnToUpdate, $value, $conditions): bool
