@@ -18,13 +18,13 @@ class RoomController extends Controller
     private Client $redisClient;
 
 
-    public function redisCheck()
-    {
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        $roomRef = $data['roomRef'];
-        var_dump($this->redisClient->lrange($roomRef, 0, -1));
-    }
+//    public function redisCheck()
+//    {
+//        $json = file_get_contents('php://input');
+//        $data = json_decode($json, true);
+//        $roomRef = $data['roomRef'];
+//        echo json_encode($this->redisClient->lrange($roomRef, 0, -1));
+//    }
 
 
     public function __construct()
@@ -122,10 +122,14 @@ class RoomController extends Controller
             echo json_encode($response);
             return;
         }
+
+        $roomMessages = $this->redisClient->lrange($roomRef, 0, -1);
+
         $response = array(
             'status' => 'success',
-            'data' => $roomData,
-            'message' => "joined $roomRef successfully"
+            'roomData' => $roomData,
+            'message' => "joined $roomRef successfully",
+            'roomMessages' => $roomMessages
         );
         $response = json_encode($response);
         echo $response;
