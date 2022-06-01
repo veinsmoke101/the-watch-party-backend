@@ -39,20 +39,52 @@ class AuthController extends Controller
         }
 
         unset($userData['password']);
+        echo $this->generateJWT($userData);
+    }
+
+    public function login()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $userData = $this->user->checkUserByEmail($data['email']);
+        if(!$userData) {
+            $this->response->setStatusCode(401);
+            $response = [
+                'status' => 'error',
+                'message' => 'email not found'
+            ];
+            echo json_encode($response);
+            return;
+        }
+        if(!password_verify($data['password'], $userData['password'])){
+            $this->response->setStatusCode(401);
+            $response = [
+                'status' => 'error',
+                'message' => 'password is incorrect'
+            ];
+            echo json_encode($response);
+            return;
+        }
+        unset($userData['password']);
+        echo $this->generateJWT($userData);
+    }
+
+    public function generateJWT($data): bool|string
+    {
+
         $payload = [
             'iss'   => 'localhost',
             'aud'   => 'localhost',
             'exp'   => time() + 10000,
-            'data'  => $userData
+            'data'  => $data
         ];
         $jwt = JWT::encode($payload, $_ENV['SECRET_KEY'], 'HS256');
 
         $response = [
             'status'    => 'success',
             'jwt'       => $jwt,
-            'data'      => $userData
+            'data'      => $data
         ];
-        echo json_encode($response);
+        return json_encode($response);
     }
 
 }

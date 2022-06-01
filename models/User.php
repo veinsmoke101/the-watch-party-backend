@@ -18,4 +18,8 @@ class User extends Model
         return $this->insert($userData);
     }
 
+    public function checkUserByEmail($email){
+        return $this->getOneRecordByColumn('email',$email);
+    }
+
 }
