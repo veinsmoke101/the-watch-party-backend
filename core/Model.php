@@ -51,6 +51,11 @@ class Model
         $this->db->getOneRecord();
     }
 
+    public function getLastInsertedId(): bool|string
+    {
+        return $this->db->lastInsertedId();
+    }
+
     public function insert($data): bool
     {
         $fields = array_keys($data);

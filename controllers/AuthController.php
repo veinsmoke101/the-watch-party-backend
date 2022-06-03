@@ -40,6 +40,7 @@ class AuthController extends Controller
         }
 
         unset($userData['password']);
+        $userData['id'] = $this->user->getLastInsertedId();
         echo $this->generateJWT($userData);
     }
 

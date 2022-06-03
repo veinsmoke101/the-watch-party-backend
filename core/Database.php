@@ -39,10 +39,10 @@ class Database
     }
 
     /**
-     * @param string|array $params
+     * @param array|string $params
      * @return void
      */
-    public function bind($params)
+    public function bind(array|string $params)
     {
         try{
             foreach ($params as $param => $value){
@@ -90,6 +90,11 @@ class Database
     {
         $this->execute();
         return $this->statment->rowCount();
+    }
+
+    public function lastInsertedId(): bool|string
+    {
+        return $this->pdo->lastInsertId();
     }
 
 }
