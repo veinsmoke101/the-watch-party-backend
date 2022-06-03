@@ -10,23 +10,23 @@ $app->router->get('/', function () {
     die();
 }   );
 
-$app->router->get('/login',                 [new AuthController, 'login']);
-$app->router->post('/login',                [new AuthController, 'login']);
-$app->router->get('/register',              [new AuthController, 'register']);
-$app->router->post('/register',             [new AuthController, 'register']);
-$app->router->get('/profile/{id}',          [new AuthController, 'profile']);
-$app->router->get('/room/{room_id}/{user_id}',[new RoomController, 'joinRoom']); // done
-$app->router->post('/leave/room',           [new RoomController, 'leaveRoom']); // done
-$app->router->post('/new/room',             [new RoomController, 'newRoom']); // done
-$app->router->post('/new/vid',              [new RoomController, 'newVideo']); // done
-$app->router->post('/room/all/users',       [new RoomHistoryController, 'roomUsers']); // done
-$app->router->post('/room/current/users',   [new RoomHistoryController, 'currentRoomUsers']); // done
-$app->router->post('/user/rooms',           [new RoomHistoryController, 'userRooms']); // done
-$app->router->post('/new/message',          [new MessageController(), 'newMessage']); // done
-$app->router->post('/last/messages',        [new MessageController(), 'lastMessages']);
-$app->router->post('/video/pause',          [new MessageController(), 'pauseVideoMessage']);
-$app->router->post('/video/play',           [new MessageController(), 'playVideoMessage']);
-$app->router->post('/video/jump',           [new MessageController(), 'jumpVideoMessage']);
+$app->router->get('/login',                     [new AuthController, 'login']);
+$app->router->post('/login',                    [new AuthController, 'login']);
+$app->router->get('/register',                  [new AuthController, 'register']);
+$app->router->post('/register',                 [new AuthController, 'register']);
+$app->router->get('/profile/{id}',              [new AuthController, 'profile']);
+$app->router->get('/room/{room_id}/{user_id}',  [new RoomController, 'joinRoom']); // done
+$app->router->post('/leave/room',               [new RoomController, 'leaveRoom']); // done
+$app->router->post('/new/room',                 [new RoomController, 'newRoom']); // done
+$app->router->post('/new/vid',                  [new RoomController, 'newVideo']); // done
+$app->router->post('/room/all/users',           [new RoomHistoryController, 'roomUsers']); // done
+$app->router->post('/room/current/users',       [new RoomHistoryController, 'currentRoomUsers']); // done
+$app->router->post('/user/rooms',               [new RoomHistoryController, 'userRooms']); // done
+$app->router->post('/new/message',              [new MessageController(), 'newMessage']); // done
+$app->router->post('/last/messages',            [new MessageController(), 'lastMessages']);
+$app->router->post('/video/pause',              [new MessageController(), 'pauseVideoMessage']);
+$app->router->post('/video/play',               [new MessageController(), 'playVideoMessage']);
+$app->router->post('/video/jump',               [new MessageController(), 'jumpVideoMessage']);
 
 
 

@@ -22,10 +22,11 @@ class AuthController extends Controller
 
     public function register()
     {
+        define("DEFAULT_IMAGE", 'profile-image.svg');
         $data = json_decode(file_get_contents('php://input'), true);
         $userData = [
             'username' => $data['username'],
-            'image' => $data['image'],
+            'image' => DEFAULT_IMAGE,
             'email' => $data['email'],
             'password' => password_hash($data['password'], PASSWORD_DEFAULT)
         ];
@@ -47,7 +48,6 @@ class AuthController extends Controller
         $data = json_decode(file_get_contents('php://input'), true);
         $userData = $this->user->checkUserByEmail($data['email']);
         if(!$userData) {
-            $this->response->setStatusCode(401);
             $response = [
                 'status' => 'error',
                 'message' => 'email not found'
@@ -56,7 +56,6 @@ class AuthController extends Controller
             return;
         }
         if(!password_verify($data['password'], $userData['password'])){
-            $this->response->setStatusCode(401);
             $response = [
                 'status' => 'error',
                 'message' => 'password is incorrect'
