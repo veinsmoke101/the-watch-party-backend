@@ -45,7 +45,7 @@ class MessageController extends Controller
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $roomRef    = $data['roomRef'];
-        $message   = ['message' => $data['message']];
+        $message = ['message' => $data['message']];
         if(array_key_exists('time',$data))
             $message['time'] = $data['time'];
 
@@ -57,7 +57,8 @@ class MessageController extends Controller
         $this->pusher->trigger(
             $roomRef,
             $event,
-            json_encode($message)
+            json_encode($message),
+            array('socket_id' => $data['socketId'])
         );
         echo json_encode(["success" => "$event sent successfully"]);
     }
