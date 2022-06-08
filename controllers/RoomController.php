@@ -141,8 +141,6 @@ class RoomController extends Controller
         $roomRef = $data['room_ref'];
         $userId = $data['user_id'];
 
-        var_dump($data);
-
         $Room = $this->model('Room');
         $room = $Room->getRoomByRef($roomRef);
 

@@ -54,10 +54,13 @@ class RoomHistoryController extends Controller
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
-        $room_id = $data['room_id'];
+        $roomRef = $data['room_ref'];
+
+        $Room = $this->model('Room');
+        $room = $Room->getRoomByRef($roomRef);
 
         $RoomHistory = $this->model('RoomHistory');
-        $users = $RoomHistory->getRoomCurrentUsers($room_id);
+        $users = $RoomHistory->getRoomCurrentUsers($room['id']);
         if(count($users) === 0){
             $response = [
                 'status'=> 'error',
