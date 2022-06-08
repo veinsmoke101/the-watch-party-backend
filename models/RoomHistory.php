@@ -23,9 +23,9 @@ class RoomHistory extends Model
         return $this->getRecordByColumn('room_id', $room_id);
     }
 
-    public function getRoomCurrentUsers($room_id)
+    public function getRoomCurrentUsers($room_id): bool|array
     {
-        $query = "select * from room_history where room_id = :room_id and user_left_at is null";
+        $query = "select users.username, users.image, users.id from room_history join users on room_history.user_id = users.id where room_id = :room_id and user_left_at is null";
         $this->db->prepare($query);
         $this->db->bind(array('room_id' => $room_id));
         return $this->db->getMultipleRecords();
@@ -40,5 +40,4 @@ class RoomHistory extends Model
     {
         return $this->updateColumnWithConditions('user_left_at', $userLeftAt, $where);
     }
-
 }

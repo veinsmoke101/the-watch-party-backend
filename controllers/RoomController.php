@@ -80,8 +80,6 @@ class RoomController extends Controller
      */
     public function joinRoom()
     {
-
-
         // get Room id from the url
         $params = Application::$app->request->getRouteParams();
         $roomRef = $params["room_id"];
@@ -140,11 +138,16 @@ class RoomController extends Controller
     {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
-        $roomId = $data['room_id'];
+        $roomRef = $data['room_ref'];
         $userId = $data['user_id'];
 
+        var_dump($data);
+
+        $Room = $this->model('Room');
+        $room = $Room->getRoomByRef($roomRef);
+
         $conditions = array(
-            'room_id' => $roomId,
+            'room_id' => $room['id'],
             'user_id' => $userId
         );
 
