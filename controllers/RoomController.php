@@ -101,6 +101,7 @@ class RoomController extends Controller
                 'status' => 'error',
                 'message' => "room expired"
             );
+
             echo json_encode($response);
             return;
         }
@@ -122,6 +123,15 @@ class RoomController extends Controller
         }
 
         $roomMessages = $this->redisClient->lrange($roomRef, 0, -1);
+
+        $RoomHistory = $this->model('RoomHistory');
+        $roomUsers = $RoomHistory->getRoomCurrentUsers($roomData['id']);
+
+        $this->pusher->trigger(
+            $roomRef,
+            'roomUsers',
+            count($roomUsers)
+        );
 
         $response = array(
             'status' => 'success',
@@ -174,7 +184,6 @@ class RoomController extends Controller
             echo json_encode($response);
             return;
         }
-
 
         $this->pusher->trigger(
             $roomRef,
