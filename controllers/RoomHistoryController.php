@@ -53,15 +53,23 @@ class RoomHistoryController extends Controller
     {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
+
         $room_id = $data['room_id'];
 
         $RoomHistory = $this->model('RoomHistory');
         $users = $RoomHistory->getRoomCurrentUsers($room_id);
         if(count($users) === 0){
-            echo "The room may have been expired or never existed";
-        }else {
-            echo json_encode($users);
+            $response = [
+                'status'=> 'error',
+                'message'=> 'The room may have been expired or never existed'
+            ];
+        }else{
+            $response = [
+                'status'=> 'success',
+                'data'=> $data['count'] ? count($users) : $users
+            ];
         }
+        echo json_encode($response);
     }
 
     public function userRooms()
