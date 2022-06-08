@@ -162,9 +162,17 @@ class RoomController extends Controller
         $currentDateTime = date('Y-m-d H:i:s');
 
         $RoomHistory = $this->model('RoomHistory');
+
         if($RoomHistory->setUserLeftAt($currentDateTime, $conditions)){
             echo 'user left the room successfully';
         }
+        $roomUsers = $RoomHistory->getRoomCurrentUsers($room['id']);
+
+        $this->pusher->trigger(
+            $roomRef,
+            'roomUsers',
+            count($roomUsers)
+        );
     }
 
     public function newVideo()
