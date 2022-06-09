@@ -22,4 +22,9 @@ class User extends Model
         return $this->getOneRecordByColumn('email',$email);
     }
 
+    public function getUserById($id)
+    {
+        return $this->getRecordById($id);
+    }
+
 }

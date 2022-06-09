@@ -133,6 +133,16 @@ class RoomController extends Controller
             count($roomUsers)
         );
 
+
+        $User = $this->model('User');
+        $NewComerUser = $User->getUserById($userId);
+
+        $this->pusher->trigger(
+            $roomRef,
+            'newUser',
+            json_encode($NewComerUser)
+        );
+
         $response = array(
             'status' => 'success',
             'roomData' => $roomData,

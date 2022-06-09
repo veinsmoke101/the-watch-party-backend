@@ -48,7 +48,7 @@ class Model
         $this->db->prepare($query);
         $data = array("id" => $id);
         $this->db->bind($data);
-        $this->db->getOneRecord();
+        return $this->db->getOneRecord();
     }
 
     public function getLastInsertedId(): bool|string
