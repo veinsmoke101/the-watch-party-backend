@@ -135,12 +135,16 @@ class RoomController extends Controller
 
 
         $User = $this->model('User');
-        $NewComerUser = $User->getUserById($userId);
+        $NewUser = $User->getUserById($userId);
+
+        // remove sensitive user data
+        unset($NewUser['password']);
+        unset($NewUser['email']);
 
         $this->pusher->trigger(
             $roomRef,
             'newUser',
-            json_encode($NewComerUser)
+            json_encode($NewUser)
         );
 
         $response = array(
@@ -184,6 +188,11 @@ class RoomController extends Controller
             $roomRef,
             'roomUsersCount',
             count($roomUsers)
+        );
+        $this->pusher->trigger(
+            $roomRef,
+            'userLeft',
+            $userId
         );
     }
 
