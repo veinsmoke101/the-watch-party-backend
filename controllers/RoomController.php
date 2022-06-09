@@ -129,8 +129,14 @@ class RoomController extends Controller
 
         $this->pusher->trigger(
             $roomRef,
-            'roomUsers',
+            'roomUsersCount',
             count($roomUsers)
+        );
+
+        $this->pusher->trigger(
+            $roomRef,
+            'roomUsers',
+            json_encode($roomUsers)
         );
 
         $response = array(
@@ -166,11 +172,12 @@ class RoomController extends Controller
         if($RoomHistory->setUserLeftAt($currentDateTime, $conditions)){
             echo 'user left the room successfully';
         }
+
         $roomUsers = $RoomHistory->getRoomCurrentUsers($room['id']);
 
         $this->pusher->trigger(
             $roomRef,
-            'roomUsers',
+            'roomUsersCount',
             count($roomUsers)
         );
     }
