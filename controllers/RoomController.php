@@ -133,17 +133,12 @@ class RoomController extends Controller
             count($roomUsers)
         );
 
-        $this->pusher->trigger(
-            $roomRef,
-            'roomUsers',
-            json_encode($roomUsers)
-        );
-
         $response = array(
             'status' => 'success',
             'roomData' => $roomData,
             'message' => "joined $roomRef successfully",
-            'roomMessages' => $roomMessages
+            'roomMessages' => $roomMessages,
+            'roomUsers' => $roomUsers
         );
         $response = json_encode($response);
         echo $response;
