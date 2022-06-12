@@ -53,6 +53,8 @@ class RoomController extends Controller
 
         $Room       = $this->model('Room');
         $RoomHost   = $this->model('RoomHost');
+
+
         if($Room->insert($newRoom)){
             // trigger a pusher channel events with the room reference
             $this->pusher->trigger(
@@ -61,8 +63,10 @@ class RoomController extends Controller
                 ''
             );
 
-
             $newRoomData = $Room->getRoomByRef($roomRef);
+
+            // insert the user as the host of the room
+            $RoomHost->insert(array('user_id' => '', 'room_id' => $newRoomData['id']));
 
             $response = array(
                 'status' => 'success',
