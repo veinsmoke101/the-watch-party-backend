@@ -18,19 +18,6 @@ class RoomHistoryController extends Controller
     }
 
 
-//    public function joinRoom()
-//    {
-//        $json = file_get_contents('php://input');
-//        $userData = json_decode($json);
-//
-//        if($this->roomHistory->store($userData)){
-//            echo 'Successfully joined the room';
-//        }else{
-//            echo 'Something went wrong';
-//        }
-//    }
-
-
     public function roomUsers()
     {
         $json = file_get_contents('php://input');

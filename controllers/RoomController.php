@@ -16,6 +16,7 @@ class RoomController extends Controller
 {
     private Pusher $pusher;
     private Client $redisClient;
+    private MessageController $messageController;
 
 
 //    public function redisCheck()
@@ -32,6 +33,7 @@ class RoomController extends Controller
         parent::__construct();
         $this->pusher = Application::$app->pusher;
         $this->redisClient = new Client();
+        $this->messageController = new MessageController();
     }
 
     public function newRoom()
@@ -132,7 +134,6 @@ class RoomController extends Controller
             'roomUsersCount',
             count($roomUsers)
         );
-
 
         $User = $this->model('User');
         $NewUser = $User->getUserById($userId);

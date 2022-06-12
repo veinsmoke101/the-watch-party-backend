@@ -46,8 +46,10 @@ class AuthController extends Controller
 
     public function login()
     {
+
         $data = json_decode(file_get_contents('php://input'), true);
         $userData = $this->user->checkUserByEmail($data['email']);
+
         if(!$userData) {
             $response = [
                 'status' => 'error',
@@ -56,6 +58,7 @@ class AuthController extends Controller
             echo json_encode($response);
             return;
         }
+
         if(!password_verify($data['password'], $userData['password'])){
             $response = [
                 'status' => 'error',
@@ -78,12 +81,16 @@ class AuthController extends Controller
             'data'  => $data
         ];
         $jwt = JWT::encode($payload, $_ENV['SECRET_KEY'], 'HS256');
+        setcookie(name: "jwt", value: $jwt,httponly: true, path: "/", domain: "localhost", expires_or_options: time()+60*60*24);
+
+
+//        unset($data['id']);
 
         $response = [
             'status'    => 'success',
-            'jwt'       => $jwt,
             'data'      => $data
         ];
+
         return json_encode($response);
     }
 
