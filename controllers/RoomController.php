@@ -16,7 +16,6 @@ class RoomController extends Controller
 {
     private Pusher $pusher;
     private Client $redisClient;
-    private MessageController $messageController;
 
 
 //    public function redisCheck()
@@ -52,7 +51,8 @@ class RoomController extends Controller
             "unique_reference"  => $roomRef
         );
 
-        $Room = $this->model('Room');
+        $Room       = $this->model('Room');
+        $RoomHost   = $this->model('RoomHost');
         if($Room->insert($newRoom)){
             // trigger a pusher channel events with the room reference
             $this->pusher->trigger(
@@ -60,6 +60,7 @@ class RoomController extends Controller
                 'videoUrl',
                 ''
             );
+
 
             $newRoomData = $Room->getRoomByRef($roomRef);
 
