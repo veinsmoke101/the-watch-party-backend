@@ -32,29 +32,34 @@ class RoomController extends Controller
         parent::__construct();
         $this->pusher = Application::$app->pusher;
         $this->redisClient = new Client();
-        $this->messageController = new MessageController();
+//        $this->messageController = new MessageController();
     }
 
     public function newRoom()
     {
-        $roomRef = uniqid('room_');
 
-        $start_at = ( isset($_POST['start_at']) && !empty($_POST['start_at']) ) ? $_POST['start_at'] : date('Y-m-d H:i:s');
-        $expire_at = ( isset($_POST['expire_at']) && !empty($_POST['expire_at']) ) ? $_POST['expire_at'] : null;
+        $roomRef = uniqid('room_');
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $start_at = ( isset($data['start_at']) && !empty($data['start_at']) ) ? $data['start_at'] : date('Y-m-d H:i:s');
+        $expire_at = ( isset($data['expire_at']) && !empty($data['expire_at']) ) ? $data['expire_at'] : null;
+
+        $payload = $this->checkUserAuthorization($data['author']);
+
+        if(!$payload) return;
+
 
         $newRoom = array(
-            "title"             => $_POST['title'],
+            "title"             => $data['title'],
             "created_at"        => date('Y-m-d H:i:s'),
             "start_at"          => $start_at,
             "expire_at"         => $expire_at,
-            "author"            => $_POST['author'],
+            "author"            => $data['author'],
             "unique_reference"  => $roomRef
         );
 
         $Room       = $this->model('Room');
-        $RoomHost   = $this->model('RoomHost');
-
-
+        
         if($Room->insert($newRoom)){
             // trigger a pusher channel events with the room reference
             $this->pusher->trigger(
@@ -64,9 +69,6 @@ class RoomController extends Controller
             );
 
             $newRoomData = $Room->getRoomByRef($roomRef);
-
-            // insert the user as the host of the room
-            $RoomHost->insert(array('user_id' => '', 'room_id' => $newRoomData['id']));
 
             $response = array(
                 'status' => 'success',

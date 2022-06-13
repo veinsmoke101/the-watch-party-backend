@@ -3,6 +3,10 @@
 namespace app\core;
 
 
+use Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 class Controller
 {
 
@@ -66,4 +70,38 @@ class Controller
         }
         return null;
     }
+
+    protected function checkUserAuthorization($userId): object|bool
+    {
+
+        try {
+            if(!isset($_COOKIE['jwt'])){
+                throw new Exception('user not authenticated', 401);
+            }
+            $decoded = JWT::decode($_COOKIE['jwt'], new Key($_ENV['SECRET_KEY'], 'HS256'));
+            if((int) $decoded->data->id !== (int) $userId){
+                throw new Exception("user not authorized".$decoded->data->id, 401);
+            }
+            return $decoded;
+        }catch(Exception $exception){
+            $this->response->setStatusCode($exception->getCode());
+            $response = [
+                'status' => 'error',
+                'message'=>$exception->getMessage()
+            ];
+            echo json_encode($response);
+            return false;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -81,7 +81,7 @@ class AuthController extends Controller
             'data'  => $data
         ];
         $jwt = JWT::encode($payload, $_ENV['SECRET_KEY'], 'HS256');
-        setcookie(name: "jwt", value: $jwt,httponly: true, path: "/", domain: "localhost", expires_or_options: time()+60*60*24);
+        setcookie(name: "jwt", value: $jwt,httponly: true, expires_or_options: time()+60*60*24);
 
 
 //        unset($data['id']);
