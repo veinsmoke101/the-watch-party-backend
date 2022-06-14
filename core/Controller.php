@@ -80,14 +80,14 @@ class Controller
             }
             $decoded = JWT::decode($_COOKIE['jwt'], new Key($_ENV['SECRET_KEY'], 'HS256'));
             if((int) $decoded->data->id !== (int) $userId){
-                throw new Exception("user not authorized".$decoded->data->id, 401);
+                throw new Exception("user not authorized", 401);
             }
             return $decoded;
         }catch(Exception $exception){
             $this->response->setStatusCode($exception->getCode());
             $response = [
                 'status' => 'error',
-                'message'=>$exception->getMessage()
+                'message'=> $exception->getMessage()
             ];
             echo json_encode($response);
             return false;

@@ -19,6 +19,7 @@ $app->router->get('/room/{room_id}/{user_id}',  [new RoomController, 'joinRoom']
 $app->router->post('/leave/room',               [new RoomController, 'leaveRoom']); // done
 $app->router->post('/new/room',                 [new RoomController, 'newRoom']); // done
 $app->router->post('/new/vid',                  [new RoomController, 'newVideo']); // done
+$app->router->post('/kick/user',                [new RoomController, 'kickUser']); // done
 $app->router->post('/room/all/users',           [new RoomHistoryController, 'roomUsers']); // done
 $app->router->post('/room/current/users',       [new RoomHistoryController, 'currentRoomUsers']); // done
 $app->router->post('/user/rooms',               [new RoomHistoryController, 'userRooms']); // done

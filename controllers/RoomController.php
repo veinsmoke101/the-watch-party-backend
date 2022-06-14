@@ -204,6 +204,21 @@ class RoomController extends Controller
         );
     }
 
+    public function kickUser()
+    {
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $payload = $this->checkUserAuthorization($data['userId']);
+        if(!$payload) return;
+
+        $this->pusher->trigger(
+            $data['roomRef'],
+            'kickUser',
+            $data['userToKick']
+        );
+    }
+
     public function newVideo()
     {
         $json = file_get_contents('php://input');
