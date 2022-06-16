@@ -160,7 +160,9 @@ class RoomController extends Controller
             'roomData' => $roomData,
             'message' => "joined $roomRef successfully",
             'roomMessages' => $roomMessages,
-            'roomUsers' => $roomUsers
+            'roomUsers' => $roomUsers,
+            'videoUrl' => $this->redisClient->get('videoUrl') ?? ''
+
         );
         $response = json_encode($response);
         echo $response;
@@ -237,16 +239,20 @@ class RoomController extends Controller
             return;
         }
 
+
+
         $this->pusher->trigger(
             $roomRef,
             'videoUrl',
             $videoUrl
         );
+        $this->redisClient->set('videoUrl', $videoUrl);
         echo 'video url sent successfully';
     }
 
     public function checkIfRoomExpired($roomRef): bool
     {
+
         $Room = $this->model('Room');
 
         $roomData = $Room->getRoomByRef($roomRef);
