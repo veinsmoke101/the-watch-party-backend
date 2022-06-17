@@ -161,7 +161,7 @@ class RoomController extends Controller
             'message' => "joined $roomRef successfully",
             'roomMessages' => $roomMessages,
             'roomUsers' => $roomUsers,
-            'videoUrl' => $this->redisClient->get('videoUrl') ?? ''
+            'videoUrl' => $this->redisClient->get($roomRef.'videoUrl') ?? ''
 
         );
         $response = json_encode($response);
@@ -246,7 +246,7 @@ class RoomController extends Controller
             'videoUrl',
             $videoUrl
         );
-        $this->redisClient->set('videoUrl', $videoUrl);
+        $this->redisClient->set($roomRef.'videoUrl', $videoUrl);
         echo 'video url sent successfully';
     }
 
