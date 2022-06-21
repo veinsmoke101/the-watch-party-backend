@@ -89,10 +89,14 @@ class RoomController extends Controller
      */
     public function joinRoom()
     {
+
         // get Room id from the url
         $params = Application::$app->request->getRouteParams();
         $roomRef = $params["room_id"];
         $userId = $params["user_id"];
+
+        $payload = $this->checkUserAuthorization($userId);
+        if(!$payload) return;
 
         // call models
         $Room = $this->model('Room');
