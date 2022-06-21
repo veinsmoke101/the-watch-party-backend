@@ -109,6 +109,15 @@ class RoomController extends Controller
 
         // handle the <<joinRoom>> process
         $roomData = $Room->getRoomByRef($roomRef);
+        if(!$roomData){
+            $this->response->setStatusCode(400);
+            $response = array(
+                'status' => 'error',
+                'message' => "Invalid room"
+            );
+            echo json_encode($response);
+            return;
+        }
         $today   = new DateTime(date('Y-m-d H:i:s'));
         $expire_at  = new DateTime($roomData["expire_at"]);
 
@@ -117,7 +126,7 @@ class RoomController extends Controller
             $this->response->setStatusCode(410);
             $response = array(
                 'status' => 'error',
-                'message' => "room expired"
+                'message' => "Room expired"
             );
 
             echo json_encode($response);
@@ -189,12 +198,15 @@ class RoomController extends Controller
         $Room = $this->model('Room');
         $room = $Room->getRoomByRef($roomRef);
 
-        if((int) $room['author'] === (int) $userId){
+//        var_dump($data);
+//        die();
+
+        if(isset($data['kick']) && (int) $room['author'] === (int) $userId){
             $this->killRoom($room['id']);
             $this->pusher->trigger(
                 $roomRef,
                 'killRoom',
-                ''
+                $userId
             );
             echo json_encode(array(
                'status'=> 'success',

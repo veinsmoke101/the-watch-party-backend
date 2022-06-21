@@ -2,7 +2,6 @@
 
 namespace app\core;
 
-
 use Exception;
 
 class Model
@@ -82,7 +81,6 @@ class Model
             if($i < count($conditionColumns) - 1){
                 $whereClause .= ' and ';
             }
-
         }
         $data = array(
             $columnToUpdate => $value,
