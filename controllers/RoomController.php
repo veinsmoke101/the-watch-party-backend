@@ -7,6 +7,8 @@ namespace app\controllers;
 
 use app\core\Application;
 use app\core\Controller;
+use app\models\Room;
+use app\models\RoomHistory;
 use DateTime;
 use Exception;
 use Predis\Client;
@@ -16,7 +18,8 @@ class RoomController extends Controller
 {
     private Pusher $pusher;
     private Client $redisClient;
-
+    private Room $room;
+    private RoomHistory $roomHistory;
 
 //    public function redisCheck()
 //    {
@@ -32,6 +35,8 @@ class RoomController extends Controller
         parent::__construct();
         $this->pusher = Application::$app->pusher;
         $this->redisClient = new Client();
+        $this->room = new Room();
+        $this->roomHistory = new RoomHistory();
 //        $this->messageController = new MessageController();
     }
 
@@ -175,6 +180,7 @@ class RoomController extends Controller
 
     public function leaveRoom()
     {
+
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $roomRef = $data['room_ref'];
@@ -183,6 +189,20 @@ class RoomController extends Controller
         $Room = $this->model('Room');
         $room = $Room->getRoomByRef($roomRef);
 
+        if((int) $room['author'] === (int) $userId){
+            $this->killRoom($room['id']);
+            $this->pusher->trigger(
+                $roomRef,
+                'killRoom',
+                ''
+            );
+            echo json_encode(array(
+               'status'=> 'success',
+               'message'=> 'room ended successfully'
+            ));
+            return;
+        }
+        
         $conditions = array(
             'room_id' => $room['id'],
             'user_id' => $userId
@@ -224,6 +244,7 @@ class RoomController extends Controller
             $data['userToKick']
         );
     }
+    
 
     public function newVideo()
     {
@@ -299,6 +320,19 @@ class RoomController extends Controller
         $RoomHistory = $this->model('RoomHistory');
         $today = date('Y-m-d H:i:s');
         $RoomHistory->setUserLeftAt($today, array('user_id' => $user_id));
+    }
+
+    // !!!! needs error handling !!!!
+    private function killRoom($roomId)
+    {
+        $this->setRoomExpirationDate($roomId, date('Y-m-d H:i:s'));
+        $this->roomHistory->kickAllUsersFromRoom($roomId);
+    }
+
+    // !!!! needs error handling !!!!
+    private function setRoomExpirationDate($roomId, $date): void
+    {
+        $this->room->setExpire($roomId, $date);
     }
 
 }

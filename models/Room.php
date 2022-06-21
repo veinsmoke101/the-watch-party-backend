@@ -30,4 +30,13 @@ class Room extends Model
         $this->db->bind(array('user_id' => $user_id));
         return $this->db->getOneRecord();
     }
+
+    public function setExpire($roomId, $date): bool
+    {
+
+        $conditions = [
+            'id' => $roomId
+        ];
+        return $this->updateColumnWithConditions('expire_at', $date, $conditions);
+    }
 }

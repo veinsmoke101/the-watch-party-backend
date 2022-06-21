@@ -40,4 +40,16 @@ class RoomHistory extends Model
     {
         return $this->updateColumnWithConditions('user_left_at', $userLeftAt, $where);
     }
+
+    public function kickAllUsersFromRoom($room_id): bool
+    {
+        $query = "update room_history set user_left_at = :user_left_at where room_id = :room_id";
+        $this->db->prepare($query);
+        $bindElements = [
+            'room_id' => $room_id,
+            'user_left_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->bind($bindElements);
+        return $this->db->execute();
+    }
 }

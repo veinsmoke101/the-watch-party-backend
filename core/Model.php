@@ -71,10 +71,9 @@ class Model
         }
     }
 
-    public function updateColumnWithConditions($columnToUpdate, $value, $conditions): bool
+    public function updateColumnWithConditions($columnToUpdate, $value, $conditions = []): bool
     {
         $conditionColumns = array_keys($conditions);
-//        $conditionValue = array_values($conditions);
 
         $whereClause = '';
 
