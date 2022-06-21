@@ -227,10 +227,30 @@ class RoomController extends Controller
 
     public function newVideo()
     {
+
+
+
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $roomRef    = $data['roomRef'];
         $videoUrl   = $data['videoUrl'];
+
+        $payload = $this->checkUserAuthorization($data['userId']);
+
+        if(!$payload) return;
+
+        $Room = $this->model('Room');
+        $roomData = $Room->getRoomByRef($roomRef);
+
+        if((int)$roomData['author'] !== (int)$payload->data->id){
+            $this->response->setStatusCode(401);
+            $response = [
+                'status' => 'error',
+                'message' => 'Not authorized for this request!'
+            ];
+            echo json_encode($response);
+            return;
+        }
 
 
         if($this->checkIfRoomExpired($roomRef)) {
@@ -242,6 +262,8 @@ class RoomController extends Controller
             echo json_encode($response);
             return;
         }
+
+
 
 
 
