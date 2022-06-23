@@ -95,4 +95,40 @@ class Model
         return $this->db->execute();
 
     }
+
+    public function updateColumnsWithConditions($columnsToUpdate, $conditions = []): bool
+    {
+        $conditionColumns = array_keys($conditions);
+        $columns = array_keys($columnsToUpdate);
+
+        $whereClause = '';
+
+        for ($i = 0; $i < count($conditionColumns); $i++){
+            $whereClause .= "$conditionColumns[$i] = :$conditionColumns[$i]";
+            if($i < count($conditionColumns) - 1){
+                $whereClause .= ' and ';
+            }
+        }
+
+        $setClause = '';
+
+        for ($i = 0; $i < count($columns); $i++){
+            $setClause .= "$columns[$i] = :$columns[$i]";
+            if($i < count($columns) - 1){
+                $setClause .= ' and ';
+            }
+        }
+
+        $data = array(
+            ...$columnsToUpdate,
+            ...$conditions
+        );
+
+        $query = "Update $this->table set $setClause where $whereClause";
+
+        $this->db->prepare($query);
+        $this->db->bind($data);
+        return $this->db->execute();
+
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use app\controllers\Cloudinary;
 use app\controllers\MessageController;
 use app\controllers\RoomController;
 use app\controllers\AuthController;
@@ -11,10 +12,12 @@ $app->router->get('/', function () {
 }   );
 
 $app->router->get('/login',                     [new AuthController, 'login']);
+$app->router->post('/cloudinary/signature',     [new Cloudinary,    'getSignature']);
 $app->router->post('/login',                    [new AuthController, 'login']);
 $app->router->get('/register',                  [new AuthController, 'register']);
 $app->router->post('/register',                 [new AuthController, 'register']);
 $app->router->get('/profile/{id}',              [new AuthController, 'profile']);
+$app->router->post('/profile/update',            [new AuthController, 'profileUpdate']);
 $app->router->get('/room/{room_id}/{user_id}',  [new RoomController, 'joinRoom']); // done
 $app->router->post('/leave/room',               [new RoomController, 'leaveRoom']); // done
 $app->router->post('/new/room',                 [new RoomController, 'newRoom']); // done
