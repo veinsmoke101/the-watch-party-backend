@@ -44,6 +44,34 @@ class AuthController extends Controller
         echo $this->generateJWT($userData);
     }
 
+    public function profileUpdate()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $newProfileData = [
+            'username'      =>  $data['username'],
+            'image'         =>  $data['image'],
+            'description'   =>  $data['description']
+        ];
+        $condition = [
+            'id' => $data['userId']
+        ];
+
+        if($this->user->updateColumnsWithConditions($newProfileData, $condition)){
+            $response = [
+                'status'=> 'success',
+                'message'=> 'Profile Updated Successfully'
+            ];
+
+        }else {
+            $response = [
+                'status'=> 'error',
+                'message'=> 'Something went wrong'
+            ];
+        }
+        echo json_encode($response);
+
+    }
+
     public function login()
     {
 

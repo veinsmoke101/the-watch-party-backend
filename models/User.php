@@ -27,4 +27,11 @@ class User extends Model
         return $this->getRecordById($id);
     }
 
+    public function update($columns, $conditions): bool
+    {
+        return $this->updateColumnWithConditions($columns, $conditions);
+    }
+
+
+
 }
